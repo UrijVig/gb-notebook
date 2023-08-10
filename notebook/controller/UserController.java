@@ -5,7 +5,6 @@ import notebook.model.repository.GBRepository;
 import notebook.view.UserView;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class UserController {
@@ -19,7 +18,7 @@ public class UserController {
         repository.create(user);
     }
 
-    public User readUser(Long userId) throws Exception {
+    public User readUser(Long userId) {
         return repository.findById(userId);
     }
 

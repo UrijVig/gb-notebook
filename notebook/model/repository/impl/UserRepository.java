@@ -7,7 +7,6 @@ import notebook.model.repository.GBRepository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserRepository implements GBRepository {
     private final UserMapper mapper;
@@ -60,7 +59,7 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public User create(User user) {
+    public void create(User user) {
         List<User> users = findAll();
         long max = 0L;
         for (User u : users) {
@@ -73,7 +72,6 @@ public class UserRepository implements GBRepository {
         user.setId(next);
         users.add(user);
         write(users);
-        return user;
     }
 
     @Override
@@ -87,7 +85,7 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public Optional<User> update(Long userId, User update) {
+    public void update(Long userId, User update) {
         User editUser = findById(userId);
 
         editUser.setFirstName(update.getFirstName().isEmpty() ? editUser.getFirstName() : update.getFirstName());
@@ -95,12 +93,11 @@ public class UserRepository implements GBRepository {
         editUser.setPhone(update.getPhone().isEmpty()  ? editUser.getPhone() : update.getPhone());
 
         write(cache);
-        return Optional.of(update);
     }
 
 
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         cacheUpdate();
         if (id <= cache.size()){
             cache.remove(id - 1);
@@ -108,9 +105,7 @@ public class UserRepository implements GBRepository {
                 cache.get(i - 1).setId((long) i);
             }
             write(cache);
-            return true;
         }
-        return false;
     }
 
     private void write(List<User> users) {
